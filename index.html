@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملاكي ❤️ | حكايتنا الصغيرة</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Tahoma","Arial",sans-serif;
+  background:
+    radial-gradient(ellipse at top, rgba(180,35,115,.22), transparent 48%),
+    linear-gradient(145deg,#10051f 0%,#26082f 48%,#450b35 100%);
+  color:#fff8fc;
+  text-align:center;
+  overflow-x:hidden;
+  min-height:100vh;
+  line-height:1.7;
+}
+
+/* طبقة القلوب */
+#hearts-container{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  z-index:0;
+}
+
+/* القلوب */
+.heart{
+  position:absolute;
+  bottom:-50px;
+  color:#ff4d88;
+  animation: floatUp linear infinite;
+  opacity:0.6;
+  text-shadow:0 0 10px pink,0 0 20px pink;
+  pointer-events:none;
+}
+
+@keyframes floatUp{
+  0%{transform:translateY(0) scale(1); opacity:1;}
+  100%{transform:translateY(-120vh) scale(1.5); opacity:0;}
+}
+
+/* المحتوى فوق القلوب */
+#login, #main{
+  position:relative;
+  z-index:2;
+}
+
+.hidden{display:none !important;}
+
+#loading-screen{
+  position:fixed;
+  inset:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255,80,150,.22), transparent 42%),
+    linear-gradient(135deg,#160024,#43004f,#780039);
+  transition:opacity .8s ease, visibility .8s ease;
+}
+#loading-screen.fade-out{opacity:0;visibility:hidden;pointer-events:none;}
+.loading-card{width:min(100%,360px);padding:34px 24px;border:1px solid rgba(255,190,220,.28);
+  border-radius:28px;background:rgba(255,255,255,.07);backdrop-filter:blur(12px);
+  box-shadow:0 0 45px rgba(255,50,130,.18);}
+.loading-heart{font-size:48px;color:#ff5c9a;text-shadow:0 0 22px #ff4d88;
+  animation:heartbeat 1.1s ease-in-out infinite;}
+.loading-card h1{font-size:clamp(25px,7vw,34px);margin:14px 0 10px;color:#fff0f7;}
+.loading-card p{color:#ffd1e4;font-size:16px;line-height:1.8;margin:0 0 22px;}
+.loading-track{height:7px;overflow:hidden;border-radius:99px;background:rgba(255,255,255,.14);}
+.loading-track span{display:block;width:40%;height:100%;border-radius:99px;
+  background:linear-gradient(90deg,#ff4d88,#ffc1dd);box-shadow:0 0 14px #ff4d88;
+  animation:loadingProgress 2.8s ease-in-out forwards;}
+.loading-sparkles{margin-top:18px;letter-spacing:8px;color:#ffb7d2;animation:twinkle 1.8s ease-in-out infinite;}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.16)}}
+@keyframes loadingProgress{0%{width:0}70%{width:82%}100%{width:100%}}
+@keyframes twinkle{0%,100%{opacity:.55}50%{opacity:1}}
+
+@media (prefers-reduced-motion: reduce){
+  .loading-heart,.loading-track span,.loading-sparkles{animation:none}
+}
+
+
+
+input{
+  padding:12px;
+  border-radius:25px;
+  border:none;
+  width:220px;
+  text-align:center;
+}
+
+button{
+  padding:12px 25px;
+  border:none;
+  border-radius:25px;
+  background:#ff3366;
+  color:white;
+  cursor:pointer;
+  margin-top:15px;
+  transition:0.3s;
+}
+button:hover{background:#ff0044;}
+
+#showMsgBtn:hover{
+  box-shadow:0 0 25px #ff66aa,0 0 50px #ff66aa;
+  transform:scale(1.1);
+}
+
+.counter-box{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:15px;
+  margin:30px auto;
+}
+.time-card{
+  background:rgba(255,255,255,0.1);
+  padding:15px;
+  border-radius:15px;
+  width:100px;
+  box-shadow:0 0 15px rgba(255,0,100,0.4);
+}
+.time-card span{
+  font-size:20px;
+  font-weight:bold;
+  display:block;
+}
+
+.image-container{
+  display:inline-block;
+  margin:15px;
+}
+img{
+  width:200px;
+  border-radius:20px;
+  box-shadow:0 0 20px pink;
+  transition:0.3s;
+}
+img:hover{transform:scale(1.05);}
+
+.caption{margin-top:10px;color:#ffd1e5;font-size:14px;line-height:1.7}
+
+/* لمسة تصميم أكثر احترافية */
+#main{
+  width:min(100% - 28px, 1000px);
+  margin:0 auto;
+  padding:28px 0 70px;
+}
+#login{
+  width:min(100% - 32px, 430px);
+  margin:10vh auto 0;
+  padding:34px 24px;
+  border:1px solid rgba(255,190,220,.2);
+  border-radius:28px;
+  background:rgba(255,255,255,.065);
+  backdrop-filter:blur(14px);
+  box-shadow:0 22px 70px rgba(0,0,0,.24),0 0 35px rgba(255,60,145,.09);
+}
+h1,h2,h3{line-height:1.35}
+#main .hero-glow{color:#ff9bc8;letter-spacing:10px;font-size:16px;opacity:.85;margin-bottom:2px;text-shadow:0 0 18px #ff4d88}
+#main > h1{
+  font-size:clamp(36px,8vw,60px);
+  margin:12px 0;
+  letter-spacing:.3px;
+  background:linear-gradient(90deg,#fff1f8,#ff9bc8,#ffe1ee);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 5px 20px rgba(255,90,165,.15));
+}
+#main > h3{font-weight:400;color:#f6c5dc;margin:0 auto 28px;font-size:clamp(15px,3.8vw,19px)}
+#main > h2{
+  margin:48px 0 22px;
+  font-size:clamp(22px,5vw,30px);
+  color:#ffe4f0;
+}
+
+.countdown-section{
+  box-sizing:border-box;
+  width:min(100%,900px);
+  margin:34px auto 26px;
+  padding:clamp(22px,4vw,38px);
+  border:1px solid rgba(255,174,215,.24);
+  border-radius:30px;
+  background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025));
+  box-shadow:0 22px 55px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative;
+  overflow:hidden;
+}
+.countdown-section:before{
+  content:"";
+  position:absolute;
+  width:240px;height:240px;
+  left:-105px;top:-140px;
+  border-radius:50%;
+  background:rgba(255,67,148,.13);
+  filter:blur(12px);
+  pointer-events:none;
+}
+.countdown-heading{
+  position:relative;
+  margin:0;
+  color:#ffe3f0;
+  font-size:clamp(20px,4vw,26px);
+  font-weight:800;
+}
+.counter-box{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin:28px auto 18px;
+  max-width:700px;
+}
+.time-card{
+  box-sizing:border-box;
+  width:auto;
+  min-height:112px;
+  padding:18px 10px 16px;
+  border:1px solid rgba(255,190,220,.24);
+  border-radius:22px;
+  background:linear-gradient(155deg,rgba(255,255,255,.13),rgba(255,255,255,.045));
+  box-shadow:0 12px 28px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.08);
+  color:#ffd8e9;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  position:relative;
+  transition:transform .25s ease,border-color .25s ease;
+}
+.time-card:hover{transform:translateY(-3px);border-color:rgba(255,143,196,.5)}
+.time-card span{
+  font-size:clamp(30px,5vw,42px);
+  line-height:1.1;
+  color:#fff;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  text-shadow:0 0 18px rgba(255,125,183,.24);
+}
+.time-card small{font-size:15px;color:#f4bfd8;font-weight:700}
+.seconds-card{
+  background:linear-gradient(155deg,rgba(255,72,143,.23),rgba(255,255,255,.05));
+  border-color:rgba(255,120,180,.36);
+}
+.countdown-footer{margin:0;color:#eab3cf;font-size:15px}
+.memories-grid{
+  width:min(100%,1000px);
+  margin:10px auto 28px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:22px;
+  align-items:stretch;
+}
+.image-container{
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  min-width:0;
+  margin:0;
+  padding:12px 12px 17px;
+  border:1px solid rgba(255,190,220,.2);
+  border-radius:24px;
+  background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.035));
+  box-shadow:0 14px 35px rgba(0,0,0,.2);
+  transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;
+}
+.image-container:hover{
+  transform:translateY(-5px);
+  border-color:rgba(255,150,200,.48);
+  box-shadow:0 20px 40px rgba(0,0,0,.25),0 0 25px rgba(255,80,150,.12);
+}
+.image-container img{
+  display:block;
+  box-sizing:border-box;
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  border-radius:16px;
+  box-shadow:0 7px 20px rgba(0,0,0,.22);
+}
+.caption{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:12px;
+  color:#ffd1e5;
+  font-size:15px;
+  line-height:1.8;
+  min-height:52px;
+}
+@media(max-width:680px){
+  .countdown-section{padding:23px 15px;border-radius:24px}
+  .counter-box{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:22px auto 16px}
+  .time-card{min-height:98px;padding:14px 5px;border-radius:18px}
+  .time-card span{font-size:clamp(27px,7vw,36px)}
+  .time-card small{font-size:14px}
+  .memories-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+  .image-container{padding:8px 8px 12px;border-radius:18px}
+  .image-container img{border-radius:12px}
+  .caption{font-size:13px;line-height:1.65;min-height:48px}
+}
+@media(max-width:360px){
+  .counter-box{gap:7px}
+  .time-card{min-height:88px;padding:11px 3px}
+  .time-card span{font-size:25px}
+  .time-card small{font-size:12px}
+  .memories-grid{gap:9px}
+}
+.anniversary{
+  display:inline-block;
+  padding:10px 18px;
+  border:1px solid rgba(255,150,200,.2);
+  border-radius:999px;
+  background:rgba(255,60,145,.09);
+  font-size:16px;
+}
+.image-container{
+  vertical-align:top;
+  width:min(100%,260px);
+  margin:12px;
+  padding:10px 10px 16px;
+  border:1px solid rgba(255,190,220,.15);
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.035));
+  box-shadow:0 14px 35px rgba(0,0,0,.18);
+  transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;
+}
+.image-container:hover{
+  transform:translateY(-5px);
+  border-color:rgba(255,150,200,.42);
+  box-shadow:0 20px 40px rgba(0,0,0,.25),0 0 25px rgba(255,80,150,.1);
+}
+.image-container img{
+  display:block;
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  border-radius:15px;
+  box-shadow:0 7px 20px rgba(0,0,0,.2);
+}
+button{
+  font-family:inherit;
+  font-weight:700;
+  font-size:15px;
+  padding:13px 24px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;
+  background:linear-gradient(100deg,#ff477e,#df347f);
+  color:white;
+  cursor:pointer;
+  margin-top:15px;
+  box-shadow:0 9px 24px rgba(230,35,110,.23);
+  transition:transform .25s ease,filter .25s ease,box-shadow .25s ease;
+}
+button:hover{background:linear-gradient(100deg,#ff6495,#ed4a93);transform:translateY(-2px);box-shadow:0 13px 30px rgba(230,35,110,.32)}
+button:active{transform:scale(.98)}
+input{
+  font:inherit;
+  padding:13px 18px;
+  border-radius:999px;
+  border:1px solid rgba(255,190,220,.24);
+  width:min(100%,280px);
+  text-align:center;
+  background:rgba(255,255,255,.94);
+  color:#32142b;
+  outline:none;
+}
+input:focus{border-color:#ff80b7;box-shadow:0 0 0 4px rgba(255,90,160,.14)}
+.love-message{
+  box-sizing:border-box;
+  width:min(90%,760px);
+  padding:clamp(22px,5vw,34px);
+  border:1px solid rgba(255,150,200,.22);
+  border-radius:24px;
+  background:linear-gradient(145deg,rgba(255,50,130,.15),rgba(255,255,255,.055));
+  box-shadow:0 18px 45px rgba(0,0,0,.16);
+  line-height:2.1;
+  white-space:pre-line;
+}
+#msg{color:#ffb8ce;min-height:24px}
+@media(max-width:680px){
+  .countdown-section{padding:20px 12px;border-radius:23px}
+  .counter-box{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+  .time-card{padding:14px 5px 12px;border-radius:16px}
+  .time-card span{font-size:clamp(24px,7vw,32px)}
+}
+@media(max-width:600px){
+  #main{width:min(100% - 20px,1000px);padding-top:18px}
+  .image-container{width:calc(50% - 20px);min-width:140px;margin:7px;padding:7px 7px 12px;border-radius:17px}
+  .image-container img{border-radius:12px}
+  .counter-box{gap:8px}
+  .time-card{width:calc(33.333% - 8px);min-width:0;padding:13px 5px;border-radius:16px}
+  #login{margin-top:7vh}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+.love-message{
+  background:rgba(255,0,100,0.2);
+  padding:25px;
+  border-radius:15px;
+  margin:40px auto;
+  width:80%;
+  font-size:20px;
+  box-shadow:0 0 25px rgba(255,0,100,0.5);
+  display:none;
+}
+
+.anniversary{
+  font-size:22px;
+  color:#ff99cc;
+  margin-top:15px;
+}
+
+.eyebrow{margin:0;color:#f2b8d3;font-size:13px;letter-spacing:1px}
+.site-nav{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;margin:24px auto 30px}
+.site-nav a{color:#ffe2ef;text-decoration:none;font-size:13px;padding:8px 13px;border:1px solid rgba(255,190,220,.18);border-radius:999px;background:rgba(255,255,255,.045);transition:background .2s ease,border-color .2s ease}
+.site-nav a:hover{background:rgba(255,80,150,.13);border-color:rgba(255,150,200,.4)}
+.intro-note,.little-things,.final-surprise{width:min(100%,820px);margin:42px auto;padding:clamp(22px,5vw,34px);border:1px solid rgba(255,174,215,.17);border-radius:28px;background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.025));box-shadow:0 18px 45px rgba(0,0,0,.13)}
+.section-kicker{display:inline-block;color:#ff9dc7;font-size:13px;letter-spacing:.8px}
+.intro-note h2,.little-things h2,.final-surprise h2{margin:9px 0 12px;font-size:clamp(22px,5vw,30px);color:#ffe5f0}
+.intro-note p,.final-surprise p{max-width:650px;margin:0 auto;color:#f1c9dd;line-height:2}
+.section-subtitle{margin:0 0 20px;color:#e8b8d0;font-size:14px}
+.reasons-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.reason-card{margin:0;padding:20px 16px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(255,174,215,.18);border-radius:20px;background:rgba(255,255,255,.045);color:#fff1f8;box-shadow:none;white-space:normal}
+.reason-card:hover{background:rgba(255,70,140,.1);box-shadow:0 10px 25px rgba(0,0,0,.12)}
+.reason-icon{font-size:28px}
+.reason-card strong{font-size:16px}
+.reason-detail{display:none;color:#f3c5dc;font-weight:400;font-size:14px;line-height:1.9}
+.reason-card[aria-expanded="true"] .reason-detail{display:block;animation:fadeIn .35s ease}
+.final-surprise{position:relative;overflow:hidden;background:radial-gradient(ellipse at top,rgba(255,60,145,.12),transparent 60%),rgba(255,255,255,.035)}
+.surprise-star{font-size:38px;color:#ffacd0;text-shadow:0 0 22px #ff4d88;animation:twinkle 2s ease-in-out infinite}
+.surprise-message{margin:24px auto 0;padding:22px;border:1px solid rgba(255,150,200,.22);border-radius:20px;background:rgba(255,60,145,.08);animation:fadeIn .6s ease}
+.surprise-message p{line-height:2.1}
+.surprise-hearts{margin-top:12px;color:#ff9fc8;letter-spacing:8px;font-size:20px}
+.closing-title{padding:0 12px 25px;color:#ffd7e8;font-size:clamp(20px,4vw,28px)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.site-nav{gap:7px}.site-nav a{font-size:12px;padding:7px 10px}.intro-note,.little-things,.final-surprise{margin:28px auto;padding:22px 16px;border-radius:22px}.reasons-grid{gap:9px}.reason-card{padding:16px 10px;min-height:135px;border-radius:16px}}
+
+
+.origin-story,.music-card{width:min(100%,820px);margin:36px auto;padding:clamp(22px,5vw,34px);border:1px solid rgba(255,174,215,.2);border-radius:27px;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));box-shadow:0 18px 45px rgba(0,0,0,.14)}
+.origin-story h2{margin:9px 0 12px;color:#ffe5f0;font-size:clamp(22px,5vw,30px)}
+.origin-story p{margin:8px auto;color:#f7d5e5;line-height:2;max-width:650px}
+.story-icon{font-size:34px;margin-bottom:6px}
+.story-note{font-size:15px}
+.story-date{margin-top:18px;padding:9px 14px;display:inline-flex;gap:10px;align-items:center;border:1px solid rgba(255,150,200,.2);border-radius:999px;color:#ffd7e8;font-size:13px;background:rgba(255,60,145,.07)}
+.story-date span{color:#ff8dbd}
+.music-card{display:flex;align-items:center;gap:16px;text-align:right}
+.music-disc{flex:0 0 56px;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:27px;color:#ffe8f2;background:radial-gradient(circle,#7d315e 0 20%,#251126 22% 42%,#e96a9f 44% 48%,#35132f 50%);box-shadow:0 0 24px rgba(255,80,150,.2);animation:discSpin 7s linear infinite;animation-play-state:paused}
+.music-card.is-playing .music-disc{animation-play-state:running}
+.music-copy{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0}
+.music-copy strong{font-size:17px;color:#fff0f7}
+.music-copy small{font-size:12px;color:#e7bad0}
+.music-card button{margin:0;white-space:nowrap;font-size:13px;padding:10px 15px}
+@keyframes discSpin{to{transform:rotate(360deg)}}
+@media(max-width:600px){.music-card{flex-wrap:wrap;gap:12px;padding:20px 16px}.music-copy{flex:1 1 calc(100% - 72px)}.music-card button{width:100%}.story-date{font-size:12px;flex-wrap:wrap;justify-content:center}}
+
+
+/* Final layout overrides: keep the countdown cards consistent on every screen */
+#main .countdown-section .counter-box{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  width:100%;
+  max-width:700px;
+  gap:14px !important;
+  margin:28px auto 18px;
+}
+#main .countdown-section .time-card{
+  display:flex !important;
+  box-sizing:border-box !important;
+  width:auto !important;
+  min-width:0 !important;
+  min-height:112px;
+  margin:0 !important;
+  padding:18px 10px 16px !important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border:1px solid rgba(255,190,220,.24);
+  border-radius:22px !important;
+  background:linear-gradient(155deg,rgba(255,255,255,.13),rgba(255,255,255,.045));
+  box-shadow:0 12px 28px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.08);
+}
+#main .countdown-section .time-card span{
+  display:block;
+  font-size:clamp(30px,5vw,42px) !important;
+  line-height:1.1;
+  font-weight:800;
+  color:#fff;
+}
+#main .countdown-section .time-card small{
+  display:block;
+  font-size:15px !important;
+  color:#f4bfd8;
+  font-weight:700;
+}
+#main .countdown-section .time-card.seconds-card{
+  background:linear-gradient(155deg,rgba(255,72,143,.23),rgba(255,255,255,.05));
+  border-color:rgba(255,120,180,.36);
+}
+#main .memories-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:22px !important;
+  width:min(100%,1000px);
+  margin:10px auto 28px;
+  align-items:stretch;
+}
+#main .memories-grid .image-container{
+  display:flex !important;
+  box-sizing:border-box !important;
+  flex-direction:column;
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+  padding:12px 12px 17px !important;
+}
+#main .memories-grid .image-container img{
+  width:100% !important;
+  aspect-ratio:4/5;
+  object-fit:cover;
+}
+@media(max-width:680px){
+  #main .countdown-section .counter-box{gap:10px !important;margin:22px auto 16px}
+  #main .countdown-section .time-card{min-height:98px;padding:14px 5px !important;border-radius:18px !important}
+  #main .countdown-section .time-card span{font-size:clamp(27px,7vw,36px) !important}
+  #main .countdown-section .time-card small{font-size:14px !important}
+  #main .memories-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:13px !important}
+  #main .memories-grid .image-container{padding:8px 8px 12px !important;border-radius:18px}
+}
+@media(max-width:360px){
+  #main .countdown-section .counter-box{gap:7px !important}
+  #main .countdown-section .time-card{min-height:88px;padding:11px 3px !important}
+  #main .countdown-section .time-card span{font-size:25px !important}
+  #main .countdown-section .time-card small{font-size:12px !important}
+  #main .memories-grid{gap:9px !important}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- القلوب -->
+<div id="hearts-container"></div>
+
+<!-- شاشة انتظار قبل كلمة السر -->
+<div id="loading-screen" aria-live="polite">
+  <div class="loading-card">
+    <div class="loading-heart">♥</div>
+    <h1>استني ي ملاكي ❤️</h1>
+    <p>بحضّرلك حاجة صغيرة تفرّحك...</p>
+    <div class="loading-track"><span></span></div>
+    <div class="loading-sparkles">✦ ✧ ♥ ✧ ✦</div>
+  </div>
+</div>
+
+<div id="login" class="hidden">
+  <h2>🔒 كلمه السر ي ملاكي ❤️</h2>
+  <p>اكتبي كلمة السر عشان تدخلي ي ملوكه</p>
+  <input type="password" id="pass" placeholder="كلمة السر">
+  <br>
+  <button onclick="checkPass()">دخول 💌</button>
+  <p id="msg"></p>
+</div>
+
+<div id="main" class="hidden">
+
+<div class="hero-glow" aria-hidden="true">✦ ♥ ✦</div>
+<p class="eyebrow">ركن صغير معمول مخصوص ليكي يا ملاكي</p>
+<h1>ملاكي 🌸</h1>
+<h3>من يوم 29/4/2024 وإنتي بقيتي حكاية لطيفة في أيامي ♥️</h3>
+<nav class="site-nav" aria-label="التنقل في الموقع">
+  <a href="#our-time">العداد</a>
+  <a href="#our-story">بدايتنا</a>
+  <a href="#memories">ذكريات</a>
+  <a href="#little-things">حاجات بحبها</a>
+  <a href="#final-surprise">مفاجأة</a>
+</nav>
+
+<section class="countdown-section" id="our-time" aria-label="الوقت منذ بداية معرفتنا">
+  <p class="countdown-heading">بقالنا مع بعض من أول يوم 💞</p>
+  <div class="counter-box">
+    <div class="time-card"><span id="years">0</span><small>سنة</small></div>
+    <div class="time-card"><span id="months">0</span><small>شهر</small></div>
+    <div class="time-card"><span id="days">0</span><small>يوم</small></div>
+    <div class="time-card"><span id="hours">0</span><small>ساعة</small></div>
+    <div class="time-card"><span id="minutes">0</span><small>دقيقة</small></div>
+    <div class="time-card seconds-card"><span id="seconds">0</span><small>ثانية</small></div>
+  </div>
+  <p class="countdown-footer">وكل ثانية فيها ذكرى حلوة ❤️</p>
+</section>
+
+<div id="anniversaryMsg" class="anniversary"></div>
+
+<section class="intro-note">
+  <span class="section-kicker">من قلبي ليكي</span>
+  <h2>مش لازم يكون في مناسبة عشان أفرّحك 💌</h2>
+  <p>عملتلك الركن الصغير ده عشان كل ما تفتحيه تلاقي حاجة تفكّرك إنك شخص جميل، وإن وجودك بيضيف لي حياتي طعم ومعنى .</p>
+</section>
+
+<section class="origin-story" id="our-story">
+  <div class="story-icon" aria-hidden="true">🔗</div>
+  <span class="section-kicker">أول خيط في حكايتنا</span>
+  <h2>فاكرة أول مرة اتكلمنا؟ 😂❤️</h2>
+  <p>كل الحكاية بدأت بسبب ابحاث الدكاترة ! 😂</p>
+  <p class="story-note">مين كان يتخيّل إن ابحاث الدكاترة تبقى بداية كلام وذكريات لطيفة بينا؟ أهو ساعات أحلى الحكايات بتبدأ من حاجة بسيطة وتكبر واحدة واحدة. 💗</p>
+  <div class="story-date"> 29/4/2024 <span>✦</span> أول صفحة في الحكاية</div>
+</section>
+
+<h2 id="memories">زكرياتنا ي ملاكي 📸</h2>
+
+<div class="memories-grid">
+<div class="image-container">
+  <img src="1.jpg">
+  <div class="caption">انتي منوره حياتي بجمالك ✨</div>
+</div>
+
+<div class="image-container">
+  <img src="2.jpg">
+  <div class="caption">وجودك في حياتي بيخلي الدنيا احلى💖</div>
+</div>
+
+<div class="image-container">
+  <img src="3.jpg">
+  <div class="caption">كل لحظة معاكي عمر تاني 💌</div>
+</div>
+
+<div class="image-container">
+  <img src="4.jpg">
+  <div class="caption">ضحكتك بترجعلي الحياة 🥹👀</div>
+</div>
+
+<div class="image-container">
+  <img src="5.jpg" alt="ذكرى جميلة مع ملوكة" loading="lazy">
+  <div class="caption">ربنا يديم وجودك في حياتي ❤️</div>
+</div>
+
+<div class="image-container">
+  <img src="6.jpg" alt="ذكرى جديدة لملوكة" loading="lazy">
+  <div class="caption">وكل صورة معاكي حكاية جديدة 💗</div>
+</div>
+</div><!-- /.memories-grid -->
+
+<button id="showMsgBtn">دوسي هنا لسه مخلصتش يا قلبي 😍</button>
+
+<div class="love-message" id="loveMsg">
+يا ملوكة ♥️ 
+
+يا ملوكة يا حتة من قلبي ❤️🥹 
+انتي مش مجرد حد بحبه انتي بقيتي أجمل حاجة في أيامي وبقيتي الضحكة اللي بتيجي على بالي من غير سبب والراحة اللي بحس بيها مهما كان يومي صعب وجودك في حياتي مخليني أشوف الدنيا بشكل أحلى ومهما أتكلم مش هعرف أوصفلك انتي غالية عندي قد إيه أنا بحب تفاصيلك الصغيرة قبل الكبيرة وبحب كلامك وضحكتك وطريقتك اللي بتخليني مبسوط من أقل حاجة معاكي حتى اللحظات العادية بتبقى مميزة وبتفضل في قلبي نفسي أفضل سبب في ضحكتك وأكون الشخص اللي تحكيله كل حاجة من غير ما تخافي أو تترددي ونفضل نعمل ذكريات حلوة نفتكرها ونضحك عليها بعدين أنا مش محتاج من الدنيا حاجات كتير طول ما فيها وجودك وطول ما انتي بخير ومبسوطة يا رب أفضل أشوف الفرحة في عيونك وأفضل قريب من قلبك وأقدر كل يوم أخليكي تحسي قد إيه انتي محبوبة ومميزة عندي بحبك يا ملوكة حب أكبر من الكلام وأجمل من أي وصف وانتي بالنسبالي حكاية حلوة نفسي تكمل ❤️🫶🏻🌍
+</div>
+
+<section class="little-things" id="little-things">
+  <span class="section-kicker">تفاصيل صغيرة بس غالية</span>
+  <h2>حاجات حلوة فيكي يا ملاكي 🌷</h2>
+  <p class="section-subtitle">دوسي على كل كارت وافتحي رسالة صغيرة ❤️</p>
+  <div class="reasons-grid">
+    <button class="reason-card" type="button" aria-expanded="false">
+      <span class="reason-icon">😊</span><strong>ضحكتك</strong>
+      <span class="reason-detail">ضحكتك بتدي لليوم روح حلوة، حتى لو اليوم كان عادي جدًا.</span>
+    </button>
+    <button class="reason-card" type="button" aria-expanded="false">
+      <span class="reason-icon">✨</span><strong>عفويتك</strong>
+      <span class="reason-detail">أجمل حاجة إنك على طبيعتك، وده بيخلي الكلام معاكي مريح.</span>
+    </button>
+    <button class="reason-card" type="button" aria-expanded="false">
+      <span class="reason-icon">💗</span><strong>طيبة قلبك</strong>
+      <span class="reason-detail">الاهتمام البسيط والكلمة الحلوة ساعات بيفرقوا أكتر من أي حاجة.</span>
+    </button>
+    <button class="reason-card" type="button" aria-expanded="false">
+      <span class="reason-icon">🌸</span><strong>وجودك</strong>
+      <span class="reason-detail">وجودك لوحده كفاية يخلي في اليوم ذكرى لطيفة تستاهل نفتكرها.</span>
+    </button>
+  </div>
+</section>
+
+<section class="final-surprise" id="final-surprise">
+  <div class="surprise-star">✧</div>
+  <span class="section-kicker">آخر حاجة.. وعد ❤️</span>
+  <h2>لسه في كلمة مخصوص ليكي</h2>
+  <p>اضغطي وشوفي المفاجأة الصغيرة اللي مستنياكي.</p>
+  <button id="surpriseBtn" type="button">افتحي مفاجأتك 🎁</button>
+  <div id="surpriseMessage" class="surprise-message" hidden>
+    <p>يا ملاكي، يارب دايمًا تلاقي أسباب تضحكي، وأيام تطمّن قلبك، وناس تقدّر جمال روحك. خدي بالك من نفسك، وافتكري إنك تستاهلي كل حاجة حلوة. ❤️🌷</p>
+    <div class="surprise-hearts" aria-hidden="true">♡ ♥ ♡ ♥ ♡</div>
+  </div>
+</section>
+
+<h2 class="closing-title">خلي ضحكتك منوّرة الدنيا يا ملاكي ♥️🌚</h2>
+
+<section class="music-card" aria-label="أغنيتنا">
+  <div class="music-disc" aria-hidden="true">♫</div>
+  <div class="music-copy">
+    <span class="section-kicker">أغنية الركن ده</span>
+    <strong>يوم ما اتقابلنا 🎶</strong>
+    <small>عمرو دياب · أغنية اختارها صاحب الموقع لملوكة</small>
+  </div>
+  <button id="musicToggle" type="button" aria-pressed="false">شغّلي الأغنية ▶</button>
+</section>
+<audio id="bgMusic" autoplay loop preload="auto">
+  <source src="omry.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+<script>
+var correctPassword="12/10/2004";
+
+function checkPass(){
+  if(document.getElementById("pass").value===correctPassword){
+    document.getElementById("login").style.display="none";
+    document.getElementById("main").classList.remove("hidden");
+    var music = document.getElementById("bgMusic");
+    music.play().then(function(){
+      document.getElementById("musicToggle").textContent = "إيقاف الأغنية ⏸";
+      document.getElementById("musicToggle").setAttribute("aria-pressed","true");
+      document.querySelector(".music-card").classList.add("is-playing");
+    }).catch(function(){
+      document.getElementById("musicToggle").textContent = "شغّلي الأغنية ▶";
+    });
+    // بعض المتصفحات تمنع التشغيل التلقائي؛ نحاول مجددًا مع أول تفاعل بعد الدخول.
+    var retryMusic = function(){
+      if(!document.getElementById("main").classList.contains("hidden") && music.paused){
+        music.play().then(function(){
+          document.getElementById("musicToggle").textContent = "إيقاف الأغنية ⏸";
+          document.getElementById("musicToggle").setAttribute("aria-pressed","true");
+          document.querySelector(".music-card").classList.add("is-playing");
+        }).catch(function(){});
+      }
+      document.removeEventListener("pointerdown", retryMusic);
+      document.removeEventListener("keydown", retryMusic);
+    };
+    document.addEventListener("pointerdown", retryMusic, {once:true});
+    document.addEventListener("keydown", retryMusic, {once:true});
+  }else{
+    document.getElementById("msg").innerHTML="❌ كلمة السر غلط";
+  }
+}
+
+/* العداد */
+var startDate = new Date("2024-04-29T00:00:00");
+
+function updateCounter(){
+  var now = new Date();
+  if(now < startDate){
+    ["years","months","days","hours","minutes","seconds"].forEach(function(id){
+      document.getElementById(id).innerText = "0";
+    });
+    document.getElementById("anniversaryMsg").innerHTML =
+      "💗 العدّاد هيبدأ يوم 29/4/2024 💗";
+    return;
+  }
+
+  // Calendar-aware elapsed years, months, and days.
+  var cursor = new Date(startDate);
+  var years = 0, months = 0;
+  while(new Date(cursor.getFullYear()+1, cursor.getMonth(), cursor.getDate(), cursor.getHours(), cursor.getMinutes(), cursor.getSeconds()) <= now){
+    cursor.setFullYear(cursor.getFullYear()+1);
+    years++;
+  }
+  while(new Date(cursor.getFullYear(), cursor.getMonth()+1, cursor.getDate(), cursor.getHours(), cursor.getMinutes(), cursor.getSeconds()) <= now){
+    cursor.setMonth(cursor.getMonth()+1);
+    months++;
+  }
+  var dayMs = 24*60*60*1000;
+  var days = Math.floor((now - cursor)/dayMs);
+  cursor.setDate(cursor.getDate()+days);
+
+  var remainder = Math.max(0, now - cursor);
+  var hours = Math.floor(remainder/(60*60*1000));
+  var minutes = Math.floor((remainder%(60*60*1000))/(60*1000));
+  var seconds = Math.floor((remainder%(60*1000))/1000);
+
+  document.getElementById("years").innerText=years;
+  document.getElementById("months").innerText=months;
+  document.getElementById("days").innerText=days;
+  document.getElementById("hours").innerText=hours;
+  document.getElementById("minutes").innerText=minutes;
+  document.getElementById("seconds").innerText=seconds;
+
+  if(years >= 1){
+    document.getElementById("anniversaryMsg").innerHTML="💖 كل سنة وانتي معايا ي ملاكي 💖";
+  } else {
+    document.getElementById("anniversaryMsg").innerHTML="";
+  }
+}
+
+setInterval(updateCounter,1000);
+
+/* إظهار شاشة كلمة السر بعد شاشة الانتظار */
+window.addEventListener("load", function(){
+  updateCounter();
+  setTimeout(function(){
+    var loadingScreen = document.getElementById("loading-screen");
+    loadingScreen.classList.add("fade-out");
+    document.getElementById("login").classList.remove("hidden");
+    setTimeout(function(){ loadingScreen.style.display = "none"; }, 850);
+  }, 3000);
+});
+
+/* زر تشغيل وإيقاف الأغنية */
+document.getElementById("musicToggle").addEventListener("click", function(){
+  var music = document.getElementById("bgMusic");
+  var card = document.querySelector(".music-card");
+  if(music.paused){
+    music.play().then(function(){
+      document.getElementById("musicToggle").textContent = "إيقاف الأغنية ⏸";
+      document.getElementById("musicToggle").setAttribute("aria-pressed","true");
+      card.classList.add("is-playing");
+    }).catch(function(){
+      document.getElementById("musicToggle").textContent = "مش لاقي ملف الأغنية";
+    });
+  }else{
+    music.pause();
+    document.getElementById("musicToggle").textContent = "شغّلي الأغنية ▶";
+    document.getElementById("musicToggle").setAttribute("aria-pressed","false");
+    card.classList.remove("is-playing");
+  }
+});
+
+/* كروت الرسائل الصغيرة */
+document.querySelectorAll(".reason-card").forEach(function(card){
+  card.addEventListener("click", function(){
+    var isOpen = card.getAttribute("aria-expanded") === "true";
+    card.setAttribute("aria-expanded", String(!isOpen));
+  });
+});
+
+/* المفاجأة الأخيرة */
+document.getElementById("surpriseBtn").addEventListener("click", function(){
+  var surprise = document.getElementById("surpriseMessage");
+  surprise.hidden = false;
+  this.textContent = "المفاجأة ليكي يا ملاكي ❤️";
+  this.disabled = true;
+  for(var i=0;i<18;i++){
+    (function(){
+      var heart=document.createElement("div");
+      heart.className="heart";
+      heart.textContent = Math.random() > .5 ? "♥" : "♡";
+      heart.style.left=(10+Math.random()*80)+"vw";
+      heart.style.fontSize=(14+Math.random()*22)+"px";
+      heart.style.animationDuration=(3+Math.random()*3)+"s";
+      document.getElementById("hearts-container").appendChild(heart);
+      setTimeout(function(){heart.remove();},6500);
+    })();
+  }
+});
+
+/* الرسالة */
+document.getElementById("showMsgBtn").onclick=function(){
+  document.getElementById("loveMsg").style.display="block";
+  this.style.display="none";
+};
+
+/* القلوب */
+function createHeart(){
+  var heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML="❤️";
+
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(Math.random()*20+10)+"px";
+  heart.style.animationDuration=(Math.random()*3+4)+"s";
+
+  document.getElementById("hearts-container").appendChild(heart);
+
+  setTimeout(()=>{heart.remove();},7000);
+}
+
+setInterval(createHeart,300);
+</script>
+
+</body>
+</html>
